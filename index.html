@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio of Anshaditya Sharma, a computer science engineer building intelligent systems, trading infrastructure, AI tools, cryptography demos, and interactive simulations."
+    />
+    <title>Anshaditya Sharma | Intelligent Systems Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="field" aria-hidden="true"></canvas>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Anshaditya Sharma home">
+        <span class="brand-mark">AS</span>
+        <span>Anshaditya Sharma</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#work">Work</a>
+        <a href="#systems">Systems</a>
+        <a href="#skills">Stack</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero section-pad">
+        <div class="hero-copy hero-copy-wide" data-reveal>
+          <p class="eyebrow">Computer Science Engineer | VIT Chennai</p>
+          <h1>Building intelligent systems that explain, adapt, and perform under pressure.</h1>
+          <p class="hero-text">
+            I am Anshaditya Sharma, a CSE undergraduate focused on backend systems, applied AI,
+            cryptography, and interactive engineering. My work spans matching engines, evolutionary
+            simulations, lecture search, robotics, and privacy-preserving verification.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#work">Explore selected work</a>
+            <a class="button button-secondary" href="mailto:anshadityasharma23@gmail.com">Email me</a>
+          </div>
+        </div>
+
+        <div class="hero-visual" data-reveal hidden>
+          <div class="signal-panel" aria-label="Current engineering focus">
+            <div class="signal-head">
+              <div>
+                <span class="signal-kicker">Current focus</span>
+                <strong>Systems that hold up</strong>
+              </div>
+              <span class="signal-status"><i></i> building</span>
+            </div>
+            <div class="signal-trace" aria-hidden="true">
+              <span class="trace-line trace-line-one"></span>
+              <span class="trace-line trace-line-two"></span>
+              <span class="trace-line trace-line-three"></span>
+              <span class="trace-dot trace-dot-one"></span>
+              <span class="trace-dot trace-dot-two"></span>
+              <span class="trace-dot trace-dot-three"></span>
+            </div>
+            <div class="signal-list">
+              <div><span>01</span><b>matching engine</b><em>online</em></div>
+              <div><span>02</span><b>evolution loop</b><em>active</em></div>
+              <div><span>03</span><b>verification layer</b><em>ready</em></div>
+              <div><span>04</span><b>lecture index</b><em>syncing</em></div>
+            </div>
+            <div class="signal-foot">
+              <span>ANSHADITYA / 2026</span>
+              <span>01—04</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metric-strip" data-reveal>
+          <article>
+            <span>175+</span>
+            <p>DSA problems solved across Java and C++</p>
+          </article>
+          <article>
+            <span>2.10M</span>
+            <p>mixed ops/sec benchmarked in exchange engine direct path</p>
+          </article>
+          <article>
+            <span>21m</span>
+            <p>evolved crawl distance in EvoCreatures deterministic run</p>
+          </article>
+          <article>
+            <span>8.15</span>
+            <p>CGPA in B.Tech CSE at VIT Chennai</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-pad intro-grid" id="systems">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Operating range</p>
+          <h2>From low-level correctness to visible product polish.</h2>
+        </div>
+        <div class="capability-grid">
+          <article class="capability-card tilt-card" data-reveal>
+            <span class="mono">01</span>
+            <h3>Performance systems</h3>
+            <p>
+              Deterministic order matching, WebSocket book deltas, write-behind persistence,
+              invariant-heavy money logic, and benchmark-driven design.
+            </p>
+          </article>
+          <article class="capability-card tilt-card" data-reveal>
+            <span class="mono">02</span>
+            <h3>Applied intelligence</h3>
+            <p>
+              NLP search pipelines, VLM-controlled robotics, genetic algorithms, semantic fallback
+              systems, and tools that turn complex signals into useful actions.
+            </p>
+          </article>
+          <article class="capability-card tilt-card" data-reveal>
+            <span class="mono">03</span>
+            <h3>Interactive demos</h3>
+            <p>
+              Three.js replay viewers, real-time dashboards, collaborative canvases, cryptography
+              protocol visualizers, and map-first discovery interfaces.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-pad work-section" id="work">
+        <div class="section-heading split" data-reveal>
+          <div>
+            <p class="eyebrow">Selected work</p>
+            <h2>Curated projects with real technical edge.</h2>
+          </div>
+          <p>
+            Chosen from the repositories and resume you provided, with emphasis on depth, originality,
+            and how well each project communicates engineering judgment.
+          </p>
+        </div>
+
+        <div class="project-toolbar" data-reveal>
+          <button class="filter is-active" type="button" data-filter="all">All</button>
+          <button class="filter" type="button" data-filter="systems">Systems</button>
+          <button class="filter" type="button" data-filter="ai">AI</button>
+          <button class="filter" type="button" data-filter="security">Security</button>
+          <button class="filter" type="button" data-filter="product">Product</button>
+        </div>
+
+        <div class="project-grid" id="projectGrid"></div>
+      </section>
+
+      <section class="section-pad proof-section">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Signal</p>
+          <h2>What the portfolio is meant to say in one scan.</h2>
+        </div>
+        <div class="signal-board" data-reveal>
+          <div class="signal-line">
+            <span>Can model a system</span>
+            <strong>Exchange architecture, API contracts, database recovery limits</strong>
+          </div>
+          <div class="signal-line">
+            <span>Can make AI tangible</span>
+            <strong>VLM rover, lecture navigator, genetic locomotion, offline quiz engine</strong>
+          </div>
+          <div class="signal-line">
+            <span>Can explain tradeoffs</span>
+            <strong>Benchmarks, design decisions, known limitations, replayable results</strong>
+          </div>
+          <div class="signal-line">
+            <span>Can ship usable interfaces</span>
+            <strong>Chrome extension, dashboards, maps, collaborative canvas, static demos</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-pad stack-section" id="skills">
+        <div class="section-heading split" data-reveal>
+          <div>
+            <p class="eyebrow">Technical stack</p>
+            <h2>A full-stack base with systems instincts.</h2>
+          </div>
+          <p>
+            Current toolkit pulled from the resume and repository work, grouped by how it shows up in
+            actual projects.
+          </p>
+        </div>
+
+        <div class="stack-map" data-reveal>
+          <div class="stack-column">
+            <h3>Languages</h3>
+            <p>Java, Python, C++, C, JavaScript, TypeScript, Go, SQL, HTML/CSS</p>
+          </div>
+          <div class="stack-column">
+            <h3>Backend</h3>
+            <p>Node.js, Express, FastAPI, REST APIs, WebSockets, JWT, Swagger/OpenAPI</p>
+          </div>
+          <div class="stack-column">
+            <h3>Data and infra</h3>
+            <p>MongoDB, Firebase, Postgres, Redis, Docker, GitHub Actions, Linux</p>
+          </div>
+          <div class="stack-column">
+            <h3>AI and simulation</h3>
+            <p>TensorFlow, NLTK, NumPy, pymunk, genetic algorithms, VLM integration</p>
+          </div>
+          <div class="stack-column">
+            <h3>Security and CS</h3>
+            <p>Applied cryptography, DSA, DBMS, OS, networks, compiler parsing fundamentals</p>
+          </div>
+          <div class="stack-column">
+            <h3>Hardware</h3>
+            <p>ESP32, Arduino, Embedded C/C++, sensors, servo and motor control</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-pad timeline-section">
+        <div class="section-heading" data-reveal>
+          <p class="eyebrow">Trajectory</p>
+          <h2>Built around depth, leadership, and delivery.</h2>
+        </div>
+        <div class="timeline" data-reveal>
+          <article>
+            <span>2023 - 2027</span>
+            <h3>B.Tech CSE, VIT Chennai</h3>
+            <p>Coursework across DSA, DBMS, OS, computer networks, ML, architecture, and applied cryptography.</p>
+          </article>
+          <article>
+            <span>Final year focus</span>
+            <h3>Semi-autonomous VLM rover</h3>
+            <p>ESP32-CAM rover using Gemini Vision API for live frame interpretation, obstacle avoidance, and target navigation.</p>
+          </article>
+          <article>
+            <span>Leadership</span>
+            <h3>Hackathons and cultural lead</h3>
+            <p>Led teams through real-time systems and hardware-software demos; coordinated operations as Cultural Lead.</p>
+          </article>
+          <article>
+            <span>Practice</span>
+            <h3>Algorithms and peer learning</h3>
+            <p>175+ LeetCode problems, 2-star CodeChef rating, and peer sessions on DSA, Git workflows, and API design.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact section-pad" id="contact" data-reveal>
+        <div>
+          <p class="eyebrow">Contact</p>
+          <h2>Open to serious engineering work across backend, AI systems, and product-heavy tools.</h2>
+        </div>
+        <div class="contact-actions">
+          <a class="button button-primary" href="mailto:anshadityasharma23@gmail.com">anshadityasharma23@gmail.com</a>
+          <a class="button button-secondary" href="https://github.com/AnshadityaSharma" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="button button-secondary" href="https://leetcode.com/u/Anshaditya_sharma/" target="_blank" rel="noreferrer">LeetCode</a>
+        </div>
+      </section>
+    </main>
+
+    <dialog class="project-dialog" id="projectDialog">
+      <button class="dialog-close" type="button" aria-label="Close project details">Close</button>
+      <div id="dialogContent"></div>
+    </dialog>
+
+    <script src="script.js"></script>
+  </body>
+</html>
