@@ -1,3 +1,12 @@
 .agents/
 .repo_cache/
 portfolio-*.png
+node_modules/
+dist/
+.preview/
+.preview-*.log
+src/terrain.js
+src/particles.js
+public/replays/
+PORTFOLIO_RESEARCH.md
+reactbits.txt.txt
