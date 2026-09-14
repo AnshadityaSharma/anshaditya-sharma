@@ -1,87 +1,68 @@
-/* A dedicated stage keeps the machine and the reading column distinct. */
-.journey-scene { left:52%; top:72px; width:48%; border-left:1px solid var(--rule); }
-.hero-name { width:50%; font-size:72px; line-height:1.05; top:31%; bottom:auto; }
-.hero-name .second { margin-left:0; font-size:1.24em; }
-.hero-meta { max-width:44%; }
-.hero-bottom { right:auto; width:44%; display:block; }
-.hero-bottom > p { margin-top:24px; max-width:360px; }
-.about,.work,.range,.background { padding-right:51%; }
-.about-heading { font-size:52px; line-height:1.13; }
-.about-bottom { display:block; }
-.about-bottom .margin-note { margin-bottom:30px; }
-.intro-copy { font-size:24px; }
-.kinetic { width:52%; overflow:hidden; }
-.kinetic-track { font-size:72px; }
-.work-heading { display:block; margin-bottom:45px; }
-.work-heading h2 { font-size:64px; }
-.work-heading > p { margin:24px 0 0; }
-.work-grid .project { display:flex; flex-direction:column; gap:0; padding:45px 0 65px; }
-.work-grid .project-image { width:100%; aspect-ratio:1.42; order:0; }
-.work-grid .project-info { width:100%; order:1; display:flex; justify-content:space-between; padding-top:28px; }
-.feature-number { font-size:20px; margin-bottom:16px; color:var(--accent); }
-.project-info h3 { font-size:32px; max-width:none; }
-.work-grid .project-description { order:2; max-width:100%; margin:22px 0; }
-.project-story-link { order:3; }
-.collection-entrance { display:block; padding:45px 0; }
-.collection-entrance h3 { font-size:38px; }
-.collection-entrance:after { display:none; }
-.collection-entrance > button { margin-top:25px; }
-.range-title h2 { font-size:48px; }
-.range-title h2 em { font-size:58px; }
-.approach-grid { grid-template-columns:1fr; padding:0; background:none; gap:45px; }
-.approach-grid article { padding-top:25px; }
-.approach-grid h3 { margin-top:20px; }
-.approach-grid p { max-width:100%; }
-.background-layout { grid-template-columns:1fr; gap:65px; }
+/* The opening is the screen: a full-bleed scene, never a reserved side column. */
+.journey-scene { inset:0; width:100%; border:0; }
+.hero-wrap { height:210svh; }
+.hero-stage { height:100svh; overflow:visible; }
+.hero-content { position:absolute; inset:0; width:100%; height:100%; transform-origin:0 0; background:var(--surface); will-change:transform,opacity; }
+.portfolio:has(.sculpture-fallback) .hero-wrap { height:100svh; }
+.hero-name { top:30%; bottom:auto; width:90%; font-size:112px; line-height:1.02; }
+.hero-name .second { font-size:1.35em; margin-left:0; }
+.hero-meta { top:130px; }
+.hero-bottom { bottom:65px; }
+.about { padding-top:130px; }
+.about-heading { max-width:49%; font-size:64px; }
+.about-bottom { width:49%; grid-template-columns:1fr; gap:30px; }
+.about > .section-label { width:49%; }
+.kinetic { position:relative; }
+.work { position:relative; background:transparent; }
+.work-heading { background:none; display:block; width:55%; }
+.work-heading h2 { font-size:80px; }
+.work-heading h2 em { font-size:100px; }
+.work-heading > p { margin-top:28px; }
+.work-grid .project-info,.work-grid .project-description { background:var(--surface); }
+.range { background:var(--surface); }
+.background { background:transparent; }
+.background-layout { grid-template-columns:1fr; width:53%; gap:65px; }
 .background-heading { position:static; }
-.background-heading h2 { font-size:60px; }
-.background-heading h2 em { font-size:70px; }
 .experience-list { background:none; padding:0; }
-.contact-heading { width:47%; min-height:530px; }
-.contact > .section-label { width:47%; gap:24px; }
-.contact-links { position:relative; z-index:1; }
+.contact-heading { min-height:530px; }
+.contact > .section-label { width:48%; gap:30px; }
 .story-method li { grid-template-columns:50px 1fr; }
-@media (min-width:1500px) {
- .hero-name { font-size:96px; }
- .about-heading { font-size:64px; }
+@media(min-width:1500px) {
+ .hero-name { font-size:148px; }
 }
-@media (min-width:900px) and (max-width:1150px) {
- .hero-name { font-size:54px; }
- .about-heading { font-size:42px; }
- .contact-title { font-size:54px; }
- .contact-title em { font-size:64px; }
+@media(min-width:900px) and (max-width:1150px) {
+ .hero-name { font-size:92px; }
+ .about-heading { font-size:59px; }
 }
-@media (max-width:899px) {
- .journey-scene { inset:auto 0 0; width:100%; height:30svh; z-index:8; border:0; background:var(--surface); }
- .journey-scene:before { content:""; position:absolute; inset:-22px 0 auto; height:22px; background:linear-gradient(transparent,var(--surface)); }
- .portfolio main { padding-bottom:32svh; }
- .portfolio:has(dialog[open]) .journey-scene { visibility:hidden; }
- .hero-name { width:100%; font-size:66px; }
- .hero-meta { max-width:100%; }
- .hero-bottom { width:86%; bottom:34svh; display:flex; }
- .hero-bottom > p { margin:0; }
- .about,.work,.range,.background { padding-right:7%; }
- .about-heading { font-size:48px; }
- .kinetic { width:100%; }
- .contact-heading { width:100%; min-height:360px; }
+@media(max-width:899px) {
+ .hero-wrap { height:180svh; }
+ .hero-name { font-size:72px; top:32%; }
+ .hero-meta { top:110px; }
+ .hero-bottom { bottom:55px; }
+ .about-heading { max-width:100%; font-size:58px; }
+ .about > .section-label { width:100%; }
+ .about-bottom { width:100%; }
+ .about,.background { background:var(--surface); }
+ .work { background:var(--surface); }
+ .work-heading { width:100%; }
+ .work-heading h2 { font-size:62px; }
+ .work-heading h2 em { font-size:76px; }
+ .background-layout { width:100%; gap:55px; }
+ .contact-heading { min-height:560px; width:100%; }
  .contact > .section-label { width:100%; }
- .contact { min-height:95svh; }
- .contact-title { font-size:60px; }
- .contact-title em { font-size:70px; }
- .background-layout { gap:45px; }
- section[id],footer[id] { scroll-margin-top:90px; }
+ .contact { min-height:125svh; }
 }
 @media(max-width:500px) {
- .hero-name { font-size:43px; top:24%; }
- .hero-meta { top:100px; }
- .hero-bottom { bottom:34svh; gap:25px; }
- .hero-bottom > p { max-width:210px; font-size:12px; }
- .about-heading { font-size:39px; }
- .work-heading h2 { font-size:52px; }
- .range-title h2 { font-size:40px; }
- .range-title h2 em { font-size:48px; }
- .contact-title { font-size:48px; }
- .contact-title em { font-size:58px; }
- .background-heading h2 { font-size:50px; }
- .background-heading h2 em { font-size:60px; }
+ .hero-name { font-size:43px; top:32%; }
+ .hero-name .second { font-size:1.55em; }
+ .hero-bottom { gap:25px; bottom:60px; }
+ .hero-bottom > p { font-size:14px; max-width:175px; }
+ .about-heading { font-size:44px; }
+ .work-heading h2 { font-size:48px; }
+ .work-heading h2 em { font-size:60px; }
+ .contact-heading { min-height:650px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .hero-wrap { height:110svh; }
+ .hero-content { will-change:auto; }
 }

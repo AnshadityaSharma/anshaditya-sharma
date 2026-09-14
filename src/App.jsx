@@ -128,16 +128,6 @@ export default function App() {
         0.1,
       );
       intro.from(".hero-bottom", { opacity: 0, y: 15, duration: 0.8 }, 0.6);
-      const sequence = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".hero-wrap",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1,
-        },
-      });
-      sequence.to(".hero-name", { y: -65, opacity: 0, duration: 0.42 }, 0);
-      sequence.to(".hero-meta, .hero-bottom", { opacity: 0, duration: 0.3 }, 0);
       gsap.utils.toArray("[data-reveal]").forEach((element) =>
         gsap.from(element, {
           y: 45,
@@ -299,6 +289,7 @@ export default function App() {
       <main>
         <section className="hero-wrap" id="home" aria-label="Introduction">
           <div className="hero-stage">
+            <div className="hero-content">
             <div className="hero-meta">
               <p>
                 INDEPENDENT MIND.
@@ -336,6 +327,7 @@ export default function App() {
               <span>
                 SCROLL TO UNFOLD <ArrowDown size={12} />
               </span>
+            </div>
             </div>
           </div>
         </section>

@@ -33,10 +33,10 @@ export function createSculpture(host, settings) {
   const root = new THREE.Group();
   scene.add(root);
   const layers = [];
-  function layer(y, start, end, offset = 6) {
+  function layer(y, spread) {
     const g = new THREE.Group();
     g.position.y = y;
-    g.userData = { y, start, end, offset };
+    g.userData = { y, spread };
     root.add(g);
     layers.push(g);
     return g;
@@ -56,12 +56,12 @@ export function createSculpture(host, settings) {
     parent.add(m);
     return m;
   }
-  const bottom = layer(-.14, .75, .92, 3),
-    battery = layer(-.02, .55, .75, 4),
-    board = layer(.08, .36, .55, 5),
-    cooling = layer(.17, .22, .36, 6),
-    deck = layer(.26, .08, .22, 6),
-    display = layer(.31, 0, 0, 0);
+  const bottom = layer(-.14, -1.45),
+    battery = layer(-.02, -.85),
+    board = layer(.08, -.12),
+    cooling = layer(.17, .7),
+    deck = layer(.26, 1.4),
+    display = layer(.31, 2.3);
   box(4.8, 0.11, 3.18, 0, 0, 0, aluminium, bottom, 0.06);
   box(4.57, 0.025, 2.97, 0, 0.06, 0, graphite, bottom, 0.04);
   for (const x of [-2.08, 2.08])
@@ -371,7 +371,20 @@ export function createSculpture(host, settings) {
     g.userData.materials = [...copies.values()];
   });
   const workItems = [...document.querySelectorAll(".work-grid .project")];
-  let turn = 0;
+  const hero = document.querySelector(".hero-content");
+  let heroTravel = innerHeight, revealProgress = 0;
+  // Project the live HTML hero onto the four screen corners, not an approximate box.
+  function screenTransform(points, width, height) {
+    const [a,b,c,d] = points;
+    const dx1=b.x-c.x, dx2=d.x-c.x, dx3=a.x-b.x+c.x-d.x;
+    const dy1=b.y-c.y, dy2=d.y-c.y, dy3=a.y-b.y+c.y-d.y;
+    const det=dx1*dy2-dx2*dy1;
+    const g=Math.abs(det)>1e-8 ? (dx3*dy2-dx2*dy3)/det : 0;
+    const h=Math.abs(det)>1e-8 ? (dx1*dy3-dx3*dy1)/det : 0;
+    return `matrix3d(${[(b.x-a.x+g*b.x)/width,(b.y-a.y+g*b.y)/width,0,g/width,
+      (d.x-a.x+h*d.x)/height,(d.y-a.y+h*d.y)/height,0,h/height,
+      0,0,1,0,a.x,a.y,0,1].join(",")})`;
+  }
   let mobile = false,
     visible = true,
     frame,
@@ -393,18 +406,20 @@ export function createSculpture(host, settings) {
     mobile = innerWidth < 900;
     renderer.setSize(r.width, r.height);
     camera.aspect = r.width / r.height;
-    camera.fov = mobile ? 32 : 36;
+    camera.fov = mobile ? 43 : 36;
     camera.updateProjectionMatrix();
     idleFrames = 0;
   };
   let anchors = [];
   const measure = () => {
+    heroTravel = Math.max(1, document.getElementById("home").offsetHeight-innerHeight);
     anchors = ["home","about","work","approach","background","contact"].map(id =>
       document.getElementById(id).getBoundingClientRect().top + scrollY);
   };
   const onScroll = () => {
     if (!anchors.length) measure();
     const y = scrollY + innerHeight * .18;
+    idleFrames = 0;
     const marks = [0,.2,.38,.68,.8,1];
     let index = anchors.findIndex((top,i) => i < anchors.length-1 && y >= top && y < anchors[i+1]);
     if (y >= anchors[5]) targetP = 1;
@@ -437,21 +452,46 @@ export function createSculpture(host, settings) {
     const still = settings.current.paused;
     const goal = targetP;
     const night = settings.current.night;
-    if ((still || goal < .98) && Math.abs(p-goal)<.0002 && (still || smooth.distanceTo(pointer)<.002) && lastLamp === night && idleFrames > 5) return;
+    if (Math.abs(revealProgress-Math.min(1,scrollY/heroTravel))<.0002 && (still || goal < .88) && Math.abs(p-goal)<.0002 && (still || smooth.distanceTo(pointer)<.002) && lastLamp === night && idleFrames > 5) return;
     renderer.toneMappingExposure = night ? .72 : 1.15;
     edge.emissive.set(night ? "#5872b5" : "#000000");
     edge.emissiveIntensity = night ? .18 : 0;
     p = still ? goal : p + (goal - p) * 0.085;
     smooth.lerp(still ? new THREE.Vector2() : pointer, 0.04);
-    clock += Math.min(step, 0.05 * 1000) / 1000;
-    const launching = THREE.MathUtils.smoothstep(p, .9, 1);
+    if (!still) clock += Math.min(step,50)/1000;
+    const separation = THREE.MathUtils.smoothstep(p,.18,.45) * (1-THREE.MathUtils.smoothstep(p,.75,.95));
+    const assembled = THREE.MathUtils.smoothstep(p,.90,.97);
+    const revealGoal = Math.min(1,scrollY/heroTravel);
+    revealProgress = still ? revealGoal : revealProgress+(revealGoal-revealProgress)*.12;
+    const reveal = THREE.MathUtils.smoothstep(revealProgress,0,1);
     const active = workItems.findIndex(el => {const r=el.getBoundingClientRect(); return r.top < innerHeight*.65 && r.bottom > innerHeight*.35;});
-    const stage = launching > .8 ? 9 : active >= 0 ? active + 1 : 0;
-    if (stage !== reportedStage) {
+    const stage = assembled > .8 ? 9 : active >= 0 ? active + 1 : 0;
+    if (stage !== reportedStage || lastLamp !== night) {
       reportedStage = stage;
 
       const sctx = screenCanvas.getContext("2d");
-      sctx.drawImage(screenSnapshot, 0, 0);
+      sctx.fillStyle = night ? "#111318" : "#edf0f5";
+      sctx.fillRect(0,0,1280,800);
+      sctx.save();
+      sctx.scale(1280/innerWidth,800/innerHeight);
+      sctx.fillStyle = night ? "#edf0f8" : "#17191f";
+      const title=document.querySelector(".hero-name");
+      const nameStyle=getComputedStyle(title);
+      const secondStyle=getComputedStyle(title.querySelector(".second"));
+      const titleSize=parseFloat(nameStyle.fontSize);
+      const secondSize=parseFloat(secondStyle.fontSize);
+      const left=title.offsetLeft, top=title.offsetTop;
+      sctx.font = "10px monospace";
+      sctx.fillText("INDEPENDENT MIND.",left,140);
+      sctx.fillText("ENGINEERING INSTINCT.",left,154);
+      sctx.font = "650 "+titleSize+"px "+nameStyle.fontFamily;
+      sctx.fillText("ANSHADITYA",left,top+titleSize*.88+6);
+      sctx.font = "italic "+secondSize+"px "+secondStyle.fontFamily;
+      sctx.fillText("SHARMA.",left,top+title.querySelector(".name-line").offsetHeight+secondSize*.83+6);
+      sctx.font = "19px Arial";
+      sctx.fillText("Software engineer.",innerWidth-255,innerHeight-120);
+      sctx.fillText("Curious by default.",innerWidth-255,innerHeight-95);
+      sctx.restore();
       if (stage > 0) {
         sctx.fillStyle = "#101522"; sctx.fillRect(0,0,1280,800);
         sctx.fillStyle = "#9aaee5"; sctx.font = "22px monospace";
@@ -465,37 +505,50 @@ export function createSculpture(host, settings) {
       }
       screenTex.needsUpdate = true;
     }
-    let assembled = 0;
-    layers.forEach((g, i) => {
-      const { start, end, y, offset, materials } = g.userData;
-      const t = end === 0 ? 1 : THREE.MathUtils.clamp((p-start)/(end-start), 0, 1);
-      const arrival = still ? (t > 0 ? 1 : 0) : 1 - Math.pow(1-t, 3);
-      const fade = THREE.MathUtils.smoothstep(t, 0, .28);
-      g.visible = arrival > 0;
-      g.position.set((i % 2 ? -.45 : .45) * (1-arrival), y-offset*(1-arrival), .3*(1-arrival));
-      g.rotation.set((i % 2 ? -.22 : .22)*(1-arrival), 0, .06*(1-arrival));
-      for (const m of materials) {
-        m.opacity = m.userData.restOpacity * (end === 0 || still ? 1 : fade);
-        const transparent = m.userData.restTransparent || m.opacity < 1;
-        if (transparent !== m.transparent) { m.transparent = transparent; m.needsUpdate = true; }
-        m.depthWrite = m.opacity > .98 && m.userData.restDepthWrite;
+    layers.forEach(g => {
+      g.visible = true;
+      g.position.set(0,g.userData.y+g.userData.spread*separation,0);
+      g.rotation.set(0,0,0);
+      for (const m of g.userData.materials) {
+        m.opacity=m.userData.restOpacity;
+        if (m.emissive && m.color.equals(edge.color)) {
+          m.emissive.set(night ? "#5872b5" : "#000000");
+          m.emissiveIntensity=night ? .18 : 0;
+        }
       }
-      if (t >= .999) assembled++;
     });
-    if (!still && p > .98) turn += Math.min(step,50) / 1000 * .065;
-    if (p < .9) turn = 0;
+    const autoAngle = assembled*Math.sin(clock*.25)*.3;
     hinge.rotation.x = -.14;
-    root.rotation.set(.04, -.3 + p*.18 + turn*launching + (still ? 0 : smooth.x*.13), -.035);
-    root.position.set(0, -.1, 0);
-    root.scale.setScalar(1);
-    camera.position.set((mobile ? 2.4 : 3.8)-p*1.8, (mobile ? 3.2 : 4.2)-p*.8 + (still ? 0 : smooth.y*.18), (mobile ? 8.2 : 10.2) + p*1.3);
-    camera.lookAt(0, .8, 0);
-    shadow.position.x = 0;
-    shadow.material.opacity = THREE.MathUtils.smoothstep(p,.75,.94)*.65;
-    renderer.domElement.dataset.progress = p.toFixed(3);
-    renderer.domElement.dataset.layers = assembled;
-    renderer.domElement.dataset.stage = stage;
-    renderer.domElement.dataset.turn = turn.toFixed(3);
+    root.rotation.set(.06*reveal,(-.42+separation*.25+(still?0:smooth.x*.17)+autoAngle)*reveal,-.06*reveal);
+    root.position.set(mobile ? 0 : 4.1*reveal, mobile ? -.3*reveal-assembled*2.2 : -.15*reveal,0);
+    root.scale.setScalar(mobile ? 1-reveal*.4 : 1.15-reveal*.25-separation*.1);
+    camera.position.set((mobile?3:7)*reveal,2.1+reveal*3.1+separation*2,4+reveal*(mobile?9.5:8.5)+separation*4);
+    camera.lookAt(mobile?0:.8*reveal,2.1-reveal*1.45+separation*.4,0);
+    shadow.position.x = mobile?0:2.5;
+    shadow.material.opacity = reveal*(1-separation*.4);
+    scene.updateMatrixWorld(true);
+    camera.updateMatrixWorld(true);
+    if (hero) {
+      const w=innerWidth,h=innerHeight;
+      const corners=[[-2.215,1.365],[2.215,1.365],[2.215,-1.365],[-2.215,-1.365]];
+      const full=[{x:0,y:0},{x:w,y:0},{x:w,y:h},{x:0,y:h}];
+      const points=corners.map(([x,y],i)=>{
+        const v=screen.localToWorld(new THREE.Vector3(x,y,0)).project(camera);
+        const fit=THREE.MathUtils.smoothstep(reveal,0,.78);
+        return {x:THREE.MathUtils.lerp(full[i].x,(v.x+1)*w/2,fit),
+          y:THREE.MathUtils.lerp(full[i].y,(1-v.y)*h/2,fit)};
+      });
+      hero.style.transform = still ? "none" : screenTransform(points,w,h);
+      hero.style.opacity = still ? (revealGoal<.5?"1":"0") : String(1-THREE.MathUtils.smoothstep(reveal,.99,1));
+      hero.style.visibility = revealGoal>=1 ? "hidden" : "visible";
+      hero.inert = revealGoal>.05;
+    }
+    host.style.visibility = reveal<.015 ? "hidden" : "visible";
+    renderer.domElement.dataset.progress=p.toFixed(3);
+    renderer.domElement.dataset.reveal=reveal.toFixed(3);
+    renderer.domElement.dataset.separation=separation.toFixed(3);
+    renderer.domElement.dataset.stage=stage;
+    renderer.domElement.dataset.turn=autoAngle.toFixed(3);
     renderer.render(scene, camera);
     if (renderer.domElement.dataset.ready !== "true") {
       renderer.domElement.dataset.ready = "true";
@@ -537,5 +590,6 @@ export function createSculpture(host, settings) {
     pmrem.dispose();
     renderer.dispose();
     renderer.domElement.remove();
+    if (hero) { hero.style.transform=""; hero.style.opacity=""; hero.style.visibility=""; hero.inert=false; }
   };
 }
